@@ -1,15 +1,39 @@
+'''
+MIT License
+
+Copyright (c) 2019 Oleksii Savchenko
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+'''
+
 import os
 import cv2
 from vidstab import VidStab, layer_overlay, download_ostrich_video
 
 # Download test video to stabilize
-if not os.path.isfile("ostrich.mp4"):
-    download_ostrich_video("ostrich.mp4")
+if not os.path.isfile("./in/takeoff_720p.mp4"):
+    download_ostrich_video("./in/takeoff_720p.mp4")
 
 # Initialize object tracker, stabilizer, and video reader
 object_tracker = cv2.TrackerCSRT_create()
 stabilizer = VidStab()
-vidcap = cv2.VideoCapture("ostrich.mp4")
+vidcap = cv2.VideoCapture("./in/takeoff_720p.mp4")
 
 # Initialize bounding box for drawing rectangle around tracked object
 object_bounding_box = None
@@ -18,7 +42,7 @@ while True:
     grabbed_frame, frame = vidcap.read()
 
     # Pass frame to stabilizer even if frame is None
-    stabilized_frame = stabilizer.stabilize_frame(input_frame=frame, border_size=50)
+    stabilized_frame = stabilizer.stabilize_frame(input_frame=frame, border_size=30)
 
     # If stabilized_frame is None then there are no frames left to process
     if stabilized_frame is None:
@@ -31,7 +55,7 @@ while True:
         if success:
             (x, y, w, h) = [int(v) for v in object_bounding_box]
             cv2.rectangle(stabilized_frame, (x, y), (x + w, y + h),
-                          (0, 255, 0), 2)
+                          (0, 255, 0), 1)
 
     # Display stabilized output
     cv2.imshow('Frame', stabilized_frame)
