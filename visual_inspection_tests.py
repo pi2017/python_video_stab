@@ -38,7 +38,7 @@ stabilizer.stabilize(download_to_path,
                      'stable.avi',
                      # max_frames=30,
                      border_type='black',
-                     border_size='auto',
+                     border_size=10,
                      layer_func=layer_overlay,
                      playback=True)
 

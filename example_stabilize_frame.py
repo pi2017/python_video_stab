@@ -1,3 +1,8 @@
+"""
+OpenCV
+Stabilize frame
+Date: 10.10.2019
+"""
 import tempfile
 import cv2
 from vidstab import VidStab, layer_overlay, download_ostrich_video
@@ -8,8 +13,8 @@ ostrich_video_path = f'{tmp_dir.name}/vid.avi'
 download_ostrich_video(ostrich_video_path)
 
 # Init stabilizer and video reader
-stabilizer = VidStab()
-vidcap = cv2.VideoCapture(ostrich_video_path)
+stabilizer = VidStab(kp_method='FAST', threshold=42, nonmaxSuppression=False)
+vidcap = cv2.VideoCapture('in/takeoff_720.mp4')
 
 while True:
     grabbed_frame, frame = vidcap.read()
@@ -21,7 +26,8 @@ while True:
     # Pass frame to stabilizer even if frame is None
     stabilized_frame = stabilizer.stabilize_frame(input_frame=frame,
                                                   layer_func=layer_overlay,
-                                                  border_size=100)
+                                                  border_size=10,
+                                                  border_type='reflect')
 
     # If stabilized_frame is None then there are no frames left to process
     if stabilized_frame is None:

@@ -27,13 +27,13 @@ import cv2
 from vidstab import VidStab, layer_overlay, download_ostrich_video
 
 # Download test video to stabilize
-if not os.path.isfile("./in/takeoff_720p.mp4"):
-    download_ostrich_video("./in/takeoff_720p.mp4")
+if not os.path.isfile("./in/takeoff_720.mp4"):
+    download_ostrich_video("./in/takeoff_720.mp4")
 
 # Initialize object tracker, stabilizer, and video reader
 object_tracker = cv2.TrackerCSRT_create()
 stabilizer = VidStab()
-vidcap = cv2.VideoCapture("./in/takeoff_720p.mp4")
+vidcap = cv2.VideoCapture("./in/takeoff_720.mp4")
 
 # Initialize bounding box for drawing rectangle around tracked object
 object_bounding_box = None
@@ -68,7 +68,7 @@ while True:
         object_bounding_box = cv2.selectROI("Frame",
                                             stabilized_frame,
                                             fromCenter=False,
-                                            showCrosshair=True)
+                                            showCrosshair=False)
         object_tracker.init(stabilized_frame, object_bounding_box)
     elif key == 27:
         break
