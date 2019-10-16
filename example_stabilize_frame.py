@@ -13,8 +13,8 @@ ostrich_video_path = f'{tmp_dir.name}/vid.avi'
 download_ostrich_video(ostrich_video_path)
 
 # Init stabilizer and video reader
-stabilizer = VidStab(kp_method='FAST', threshold=42, nonmaxSuppression=False)
-vidcap = cv2.VideoCapture('in/takeoff_720.mp4')
+stabilizer = VidStab()
+vidcap = cv2.VideoCapture('in/c13_720p.mp4')
 
 while True:
     grabbed_frame, frame = vidcap.read()
@@ -26,8 +26,8 @@ while True:
     # Pass frame to stabilizer even if frame is None
     stabilized_frame = stabilizer.stabilize_frame(input_frame=frame,
                                                   layer_func=layer_overlay,
-                                                  border_size=10,
-                                                  border_type='reflect')
+                                                  border_size=5,
+                                                  border_type='replicate')
 
     # If stabilized_frame is None then there are no frames left to process
     if stabilized_frame is None:

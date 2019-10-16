@@ -20,8 +20,8 @@ sys.path.insert(0, os.path.abspath('..'))
 # -- Project information -----------------------------------------------------
 
 project = 'vidstab'
-copyright = '2018, Adam Spannbauer'
-author = 'Adam Spannbauer'
+copyright = '2018 '
+author = 'Adam'
 
 # The short X.Y version
 version = ''
@@ -137,7 +137,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'vidstab.tex', 'vidstab Documentation',
-     'Adam Spannbauer', 'manual'),
+     'Adam', 'manual'),
 ]
 
 

@@ -27,13 +27,16 @@ import cv2
 from vidstab import VidStab, layer_overlay, download_ostrich_video
 
 # Download test video to stabilize
-if not os.path.isfile("./in/takeoff_720.mp4"):
-    download_ostrich_video("./in/takeoff_720.mp4")
+if not os.path.isfile("in/copter.mp4"):
+    download_ostrich_video("in/out_copter.mp4")
 
 # Initialize object tracker, stabilizer, and video reader
-object_tracker = cv2.TrackerCSRT_create()
+#object_tracker = cv2.TrackerCSRT_create()
+object_tracker = cv2.TrackerMOSSE_create()
+# Initialize stabilizer
 stabilizer = VidStab()
-vidcap = cv2.VideoCapture("./in/takeoff_720.mp4")
+# Video reader
+vidcap = cv2.VideoCapture("in/copter.mp4")
 
 # Initialize bounding box for drawing rectangle around tracked object
 object_bounding_box = None
@@ -42,7 +45,9 @@ while True:
     grabbed_frame, frame = vidcap.read()
 
     # Pass frame to stabilizer even if frame is None
-    stabilized_frame = stabilizer.stabilize_frame(input_frame=frame, border_size=30)
+    stabilized_frame = stabilizer.stabilize_frame(input_frame=frame,
+                                                  border_size=10,
+                                                  border_type='replicate')
 
     # If stabilized_frame is None then there are no frames left to process
     if stabilized_frame is None:
@@ -58,14 +63,14 @@ while True:
                           (0, 255, 0), 1)
 
     # Display stabilized output
-    cv2.imshow('Frame', stabilized_frame)
+    cv2.imshow('Tracking and Stabilize', stabilized_frame)
 
     key = cv2.waitKey(5)
 
     # Select ROI for tracking and begin object tracking
     # Non-zero frame indicates stabilization process is warmed up
     if stabilized_frame.sum() > 0 and object_bounding_box is None:
-        object_bounding_box = cv2.selectROI("Frame",
+        object_bounding_box = cv2.selectROI("Tracking and Stabilize",
                                             stabilized_frame,
                                             fromCenter=False,
                                             showCrosshair=False)
