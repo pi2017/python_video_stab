@@ -31,7 +31,7 @@ if not os.path.isfile("in/copter.mp4"):
     download_ostrich_video("in/out_copter.mp4")
 
 # Initialize object tracker, stabilizer, and video reader
-#object_tracker = cv2.TrackerCSRT_create()
+# object_tracker = cv2.TrackerCSRT_create()
 object_tracker = cv2.TrackerMOSSE_create()
 # Initialize stabilizer
 stabilizer = VidStab()
@@ -46,7 +46,7 @@ while True:
 
     # Pass frame to stabilizer even if frame is None
     stabilized_frame = stabilizer.stabilize_frame(input_frame=frame,
-                                                  border_size=10,
+                                                  border_size=5,
                                                   border_type='replicate')
 
     # If stabilized_frame is None then there are no frames left to process
@@ -61,6 +61,7 @@ while True:
             (x, y, w, h) = [int(v) for v in object_bounding_box]
             cv2.rectangle(stabilized_frame, (x, y), (x + w, y + h),
                           (0, 255, 0), 1)
+            cv2.putText(stabilized_frame, "What a fuck", (x+5, y-5), cv2.FONT_HERSHEY_PLAIN, 1.5, 200)
 
     # Display stabilized output
     cv2.imshow('Tracking and Stabilize', stabilized_frame)
